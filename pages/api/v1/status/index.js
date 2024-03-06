@@ -1,11 +1,50 @@
 import database from "infra/database.js";
 
 async function status(req, res) {
+  let startTime, endTime;
+  let latencies = {}; // Objeto para armazenar a latência de cada consulta
+
+  // Primeira consulta
+  startTime = process.hrtime.bigint();
   const result = await database.query("SELECT 1+1 as sum;");
-  console.log(result.rows[0]);
+  endTime = process.hrtime.bigint();
+  latencies.query1 = Number(endTime - startTime) / 1000000.0; // Convertendo nanossegundos para milissegundos
+
+  const updated_at = new Date().toISOString();
+
+  // Segunda consulta
+  startTime = process.hrtime.bigint();
+  const versionResult = await database.query("SHOW server_version;");
+  endTime = process.hrtime.bigint();
+  latencies.query2 = Number(endTime - startTime) / 1000000.0;
+
+  // Terceira consulta
+  startTime = process.hrtime.bigint();
+  const maxConnectionsResult = await database.query("SHOW max_connections;");
+  endTime = process.hrtime.bigint();
+  latencies.query3 = Number(endTime - startTime) / 1000000.0;
+
+  // Quarta consulta
+  startTime = process.hrtime.bigint();
+  const currentConnectionsResult = await database.query(
+    "SELECT count(*) FROM pg_stat_activity;",
+  );
+  endTime = process.hrtime.bigint();
+  latencies.query4 = Number(endTime - startTime) / 1000000.0;
+
   res.status(200).json({
     status: "ok",
-    data: result.rows[0],
+    updated_at: updated_at,
+    database: {
+      sum: 2, // Ajuste o valor conforme necessário
+      postgres_version: versionResult.rows[0].server_version,
+      max_connections: parseInt(
+        maxConnectionsResult.rows[0].max_connections,
+        10,
+      ),
+      current_connections: parseInt(currentConnectionsResult.rows[0].count, 10),
+    },
+    latency: latencies, // Incluindo o objeto de latências no JSON de resposta
   });
 }
 
