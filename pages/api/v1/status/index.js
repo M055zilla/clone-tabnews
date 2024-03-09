@@ -25,10 +25,14 @@ async function status(req, res) {
   latencies.query3 = Number(endTime - startTime) / 1000000.0;
 
   // Quarta consulta
+  const database_name = process.env.DATABASE_NAME;
   startTime = process.hrtime.bigint();
-  const currentConnectionsResult = await database.query(
-    "SELECT count(*) FROM pg_stat_activity;",
-  );
+  const currentConnectionsResult = await database.query({
+    text: `SELECT count(*)::int FROM pg_stat_activity WHERE datname = $1;`,
+    values: [database_name],
+  });
+  const current_open_connections_value = currentConnectionsResult.rows[0].count;
+  console.log(current_open_connections_value);
   endTime = process.hrtime.bigint();
   latencies.query4 = Number(endTime - startTime) / 1000000.0;
 
@@ -42,7 +46,7 @@ async function status(req, res) {
         maxConnectionsResult.rows[0].max_connections,
         10,
       ),
-      current_connections: parseInt(currentConnectionsResult.rows[0].count, 10),
+      current_connections: current_open_connections_value,
     },
     latency: latencies, // Incluindo o objeto de latências no JSON de resposta
   });
