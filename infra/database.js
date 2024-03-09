@@ -24,6 +24,7 @@ async function query(queryObject) {
     return res;
   } catch (e) {
     console.error(e);
+    throw e;
   } finally {
     await client.end();
   }
