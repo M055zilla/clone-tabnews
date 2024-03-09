@@ -24,10 +24,7 @@ test("GET /api/v1/status should return 200 and validate response structure", asy
   expect(Number.isInteger(responseJson.database.max_connections)).toBeTruthy();
 
   // Valida o número atual de conexões
-  expect(responseJson.database.current_connections).toBeDefined();
-  expect(
-    Number.isInteger(responseJson.database.current_connections),
-  ).toBeTruthy();
+  expect(responseJson.database.current_connections).toBe(1);
 
   // Valida a estrutura e valores da latência de cada consulta
   expect(responseJson.latency).toBeDefined();

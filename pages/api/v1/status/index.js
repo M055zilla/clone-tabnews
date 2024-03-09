@@ -25,7 +25,7 @@ async function status(req, res) {
   latencies.query3 = Number(endTime - startTime) / 1000000.0;
 
   // Quarta consulta
-  const database_name = process.env.DATABASE_NAME;
+  const database_name = process.env.POSTGRES_DB;
   startTime = process.hrtime.bigint();
   const currentConnectionsResult = await database.query({
     text: `SELECT count(*)::int FROM pg_stat_activity WHERE datname = $1;`,
