@@ -51,5 +51,4 @@ async function status(req, res) {
     latency: latencies, // Incluindo o objeto de latências no JSON de resposta
   });
 }
-
 export default status;
