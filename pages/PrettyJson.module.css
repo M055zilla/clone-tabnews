@@ -1,0 +1,34 @@
+.pretty-json-container {
+  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Courier New", Courier, monospace;
+  color: #333;
+  transition: transform 0.2s ease-in-out;
+}
+
+.pretty-json-container:hover {
+  transform: scale(1.02);
+}
+
+.pretty-json-title {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 0px #fff;
+}
+
+.pretty-json-pre {
+  background-color: #e8e8e8;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  padding: 10px;
+  overflow-x: auto;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Adicione esta parte ao seu arquivo global de estilos ou definições de CSS */

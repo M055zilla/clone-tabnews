@@ -36,8 +36,8 @@ async function status(req, res) {
   endTime = process.hrtime.bigint();
   latencies.query4 = Number(endTime - startTime) / 1000000.0;
 
-  res.status(200).json({
-    status: "ok",
+  const data = res.status(200).json({
+    status: res.statusCode,
     updated_at: updated_at,
     database: {
       sum: 2, // Ajuste o valor conforme necessário
@@ -51,4 +51,23 @@ async function status(req, res) {
     latency: latencies, // Incluindo o objeto de latências no JSON de resposta
   });
 }
+
+const PrettyJson = () => {
+  return (
+    <div>
+      <Head>
+        <title>JSON Bonito</title>
+        <meta name="description" content="Exibe um JSON de forma bonita" />
+      </Head>
+
+      {/* Aplica estilos para melhorar a leitura do JSON */}
+      <pre
+        style={{ background: "#f4f4f4", padding: "20px", borderRadius: "5px" }}
+      >
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    </div>
+  );
+};
+
 export default status;
